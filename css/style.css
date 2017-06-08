@@ -20,10 +20,23 @@ body {
 
 .content {
   margin: 0 auto;
-  width: 80%;
+  width: 90%;
+  text-align: center;
+  display: flex;
+}
+
+.content-game h2 {
   text-align: center;
 }
 
 img {
   width: 100%;
+}
+
+.col-50 {
+  width: 49%;
+}
+
+.img_content {
+  padding-right: 1%;
 }

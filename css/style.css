@@ -37,6 +37,10 @@ img {
   width: 49%;
 }
 
+.col-30 {
+  width: 30%;
+}
+
 .img_content {
   padding-right: 1%;
 }

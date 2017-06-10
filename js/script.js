@@ -1,6 +1,4 @@
 var counterClickDivCat = $(".count_click_cat");
-
-
 var emojiSad = "😞";
 var emojiSmile = "😊";
 var emojiSuperSmile = "😁";
@@ -9,6 +7,14 @@ var Cat = function(name, image){
   this.name = name;
   this.counterClicksCat = 0;
   this.image = image;
+};
+
+Cat.prototype.showClicks = function(){
+  if(this.counterClicksCat === 0) {
+    counterClickDivCat.text("No cliks Yet " + emojiSad);
+  } else {
+    counterClickDivCat.text("You clicked " + this.counterClicksCat + " times! " + (this.counterClicksCat > 10 ? emojiSuperSmile : emojiSmile));
+  }
 };
 
 var listOfCats = [
@@ -32,18 +38,10 @@ listOfCats.forEach(function(cat){
               .removeClass()
               .addClass(cat.name);
 
-              if(cat.counterClicksCat === 0) {
-                counterClickDivCat.text("No cliks Yet " + emojiSad);
-              } else {
-                counterClickDivCat.text("You clicked " + cat.counterClicksCat + " times! " + (cat.counterClicksCat > 10 ? emojiSuperSmile : emojiSmile));
-              }
-
+              cat.showClicks();
         };
     })(cat.name));
-
-
 });
-
 
 
 $("#cat img").click(function(){
@@ -51,15 +49,7 @@ $("#cat img").click(function(){
   listOfCats.forEach(function(cat){
     if (cat.name == classNameCat) {
       cat.counterClicksCat++;
-
-      //FAzer uma FUNCAO para o Objeto CAT
-      if(cat.counterClicksCat === 0) {
-        counterClickDivCat.text("No cliks Yet " + emojiSad);
-      } else {
-        counterClickDivCat.text("You clicked " + cat.counterClicksCat + " times! " + (cat.counterClicksCat > 10 ? emojiSuperSmile : emojiSmile));
-      }
-      //
-      // console.log(cat.counterClicksCat);
+      cat.showClicks();
     }
   });
 });

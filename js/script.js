@@ -6,6 +6,7 @@ $(function(){
 
     var model = {
         listOfCats: [],
+        currentCat: '',
         init: function(){
             var Cat = function(name, image){
               this.name = name;
@@ -13,11 +14,11 @@ $(function(){
               this.image = image;
           };
           listOfCats = [
-            new Cat("Chani", "cat1.jpg"),
-            new Cat("PUff", "cat2.jpg"),
-            new Cat("Garfield", "cat3.jpg"),
-            new Cat("Pill", "cat4.jpeg"),
-            new Cat("Cutee", "cat5.jpg")
+            new Cat("Chani", "images/cat1.jpg"),
+            new Cat("PUff", "images/cat2.jpg"),
+            new Cat("Garfield", "images/cat3.jpg"),
+            new Cat("Pill", "images/cat4.jpeg"),
+            new Cat("Cutee", "images/cat5.jpg")
           ];
         },
         getListOfCats: function(){
@@ -27,8 +28,30 @@ $(function(){
   };
 
 var octopus = {
+  getCat: function(catName) {
+    var listCats = this.getCats();
+    pos = listCats.map(function(e) { return e.name; });
+    return listCats[pos.indexOf(catName)];
+  },
   getCats: function () {
     return model.getListOfCats();
+  },
+
+  getCurrentCat: function(){
+    return model.currentCat;
+  },
+
+  setCurrentCat: function(catObj){
+    model.currentCat = catObj;
+  },
+
+  updateCat: function(cat, name, urlImage, clicks){
+    var oldCat = this.getCat(cat.name);
+    oldCat.name = name;
+    oldCat.image = urlImage;
+    oldCat.counterClicksCat = clicks;
+    var newCat = oldCat;
+    this.setCurrentCat(newCat);
   },
 
   addClick: function(catObj){
@@ -39,6 +62,7 @@ var octopus = {
     model.init();
     viewListCats.init();
     viewImageCat.init();
+    viewAdmin.init();
   }
 };
 
@@ -50,6 +74,7 @@ var viewListCats = {
              $("li.cat-" + cat.name).click((function(nameCopy) {
                 return function() {
                       viewImageCat.render(cat);
+                      octopus.setCurrentCat(cat);
                 };
             })(cat.name));
         });
@@ -58,32 +83,65 @@ var viewListCats = {
 
 var viewImageCat = {
   init: function(){
+
+    $(".img_content").prepend("<h4> Select the Cat on the List </h4>");
+
     $("#cat img").click(function(){
-      var classNameCat = $("#cat img").attr("class");
-      var listOfCatsArr = octopus.getCats();
-      listOfCatsArr.forEach(function(cat){
-        if (cat.name == classNameCat) {
-          octopus.addClick(cat);
-          viewImageCat.render(cat);
-          //cat.showClicks();
-        }
-      });
+      var cat = octopus.getCurrentCat();
+      octopus.addClick(cat);
+      viewImageCat.render(cat);
     });
   },
   render: function(catObj){
-
+    $(".img_content h4").remove();
     $("#cat h3").text(catObj.name);
     $(".img_content>img")
-      .attr("src","images/" + catObj.image)
+      .attr("src",catObj.image)
       .attr("alt","Image of Cute Cat called " + catObj.name)
       .removeClass()
       .addClass(catObj.name);
 
-    if(catObj.counterClicksCat === 0) {
+    if(catObj.counterClicksCat == 0) {
       counterClickDivCat.text("No cliks Yet " + emojiSad);
     } else {
       counterClickDivCat.text("You clicked " + catObj.counterClicksCat + " times! " + (catObj.counterClicksCat > 10 ? emojiSuperSmile : emojiSmile));
     }
+
+    viewAdmin.render(catObj);
+
+  }
+};
+
+var viewAdmin = {
+  init: function(){
+    $("button[name='admin-btn']").click(function(){
+      $("#admin-area").toggleClass("hidden");
+      var cat = octopus.getCurrentCat();
+      viewAdmin.render(cat);
+    });
+
+    $("button[name='cancel-btn']").click(function(){
+      $("#admin-area").toggleClass("hidden");
+    });
+
+    $("button[name='save-btn']").click(function(){
+      var cat = octopus.getCurrentCat();
+      var newName = $("input[name='cat-name']").val();
+      var newUrlImage = $("input[name='cat-url']").val();
+      var newNClicks = $("input[name='cat-clicks']").val();
+      octopus.updateCat(cat, newName, newUrlImage, newNClicks);
+      viewImageCat.render(octopus.getCurrentCat());
+    });
+  },
+  render: function(catObj){
+    if ($("#admin-btn").hasClass("hidden")) {
+      $("#admin-btn").removeClass("hidden");
+    }
+
+    $("input[name='cat-name']").val(catObj.name);
+    $("input[name='cat-url']").val(catObj.image);
+    $("input[name='cat-clicks']").val(catObj.counterClicksCat);
+
   }
 }
 

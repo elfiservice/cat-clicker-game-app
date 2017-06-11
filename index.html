@@ -23,9 +23,30 @@
         <div id="cat" class="col-50">
           <h3></h3>
           <div class="img_content">
-            <img src="" alt="Image of Cute Cat" class="cat_img">
+            <img src="" alt="" class="cat_img">
           </div>
           <div class="count_click_cat"></div>
+
+          <div id="admin-btn" class="hidden">
+
+            <button type="button" name="admin-btn">Admin</button>
+          </div>
+          <div id="admin-area" class="hidden">
+            <form class="admin-form" action="" method="post">
+              <label for="cat-name">Cat Name
+                <input type="text" name="cat-name" value="">
+              </label>
+              <label for="cat-url">Cat Url Image
+                <input type="text" name="cat-url" value="">
+              </label>
+              <label for="cat-clicks">Cat Clicks
+                <input type="text" name="cat-clicks" value="">
+              </label>
+              <button type="button" name="cancel-btn">Cancel</button>
+              <button type="button" name="save-btn">Save</button>
+            </form>
+
+          </div>
         </div>
       </section>
 

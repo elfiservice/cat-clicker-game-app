@@ -94,3 +94,16 @@ img {
 .show {
   display: block;
 }
+
+
+@media screen and (max-width: 767px) {
+  .content{
+    display: block;
+  }
+
+  .col-50, .col-30 {
+    width: 100%;
+  }
+
+
+}
